@@ -1,0 +1,36 @@
+// Настройка генератора Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Конфигурация источника данных (используется PostgreSQL для публичного деплоя)
+datasource db {
+  provider = "postgresql"
+}
+
+// Модель пользователя системы
+model User {
+  id        String     @id @default(uuid()) // Уникальный идентификатор (UUID)
+  email     String     @unique              // Email (уникальное поле для входа)
+  name      String?                         // Имя пользователя
+  lastName  String?                         // Фамилия пользователя
+  password  String                          // Хэшированный пароль
+  role      String     @default("USER")     // Роль: USER (пользователь) или ADMIN (администратор)
+  createdAt DateTime   @default(now())      // Дата регистрации
+  updatedAt DateTime   @updatedAt           // Дата последнего обновления профиля
+
+  documents Document[]                      // Связь: документы, созданные пользователем
+}
+
+// Модель документа
+model Document {
+  id          String   @id @default(uuid()) // Уникальный идентификатор документа
+  title       String                        // Название документа
+  description String?                       // Краткое описание или содержание
+  status      String   @default("DRAFT")    // Статус: DRAFT (Черновик), PENDING (На проверке), APPROVED (Одобрен), REJECTED (Отклонен)
+  authorId    String                        // ID автора (внешний ключ)
+  author      User     @relation(fields: [authorId], references: [id]) // Связь с моделью User
+  createdAt   DateTime @default(now())      // Дата создания
+  updatedAt   DateTime @updatedAt           // Дата последнего изменения
+}
+

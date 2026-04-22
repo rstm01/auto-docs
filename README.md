@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DocFlow - Система автоматизации документооборота
 
-## Getting Started
+Полностью функциональное, современное веб-приложение для автоматизации документооборота, разработанное в рамках дипломного проекта.
 
-First, run the development server:
+## Особенности и функционал
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **Современный стек**: Next.js 16 (App Router), React 19, Tailwind CSS v4.
+*   **Безопасность**: Защищенная аутентификация через NextAuth.js (JWT), хеширование паролей bcryptjs, защита от CSRF/XSS, валидация данных Zod.
+*   **Дизайн**: Минималистичный и чистый UI в стиле Apple/Google, построенный на базе shadcn/ui. Анимации через Framer Motion.
+*   **Ролевая модель**: Поддержка ролей пользователей (`USER` и `ADMIN`).
+*   **Документооборот**: Жизненный цикл документа (`Черновик` -> `На согласовании` -> `Утвержден` / `Отклонен`).
+*   **Производительность**: Server Components, оптимизированный рендеринг, быстрая навигация.
+*   **База данных**: Легковесная SQLite (легко заменяется на PostgreSQL через Prisma ORM).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Архитектура проекта
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Проект использует **Feature-based MVC-подобную архитектуру**:
+*   `src/app/` — роутинг и страницы (Next.js App Router).
+*   `src/components/` — переиспользуемые UI компоненты.
+*   `src/lib/` — утилиты, конфигурация базы данных, Auth.
+*   `src/server/` — бизнес-логика и серверные экшены (Server Actions).
+*   `prisma/` — схемы базы данных и миграции.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Быстрый старт
 
-## Learn More
+### Требования
+*   Node.js >= 20
+*   npm >= 10
 
-To learn more about Next.js, take a look at the following resources:
+### Запуск проекта
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Установите зависимости:
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Примените миграции базы данных и сгенерируйте Prisma Client:
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
 
-## Deploy on Vercel
+3. Запустите сервер разработки:
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Откройте `http://localhost:3000` в вашем браузере.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Советы по защите диплома
+
+1. **База данных**: Расскажите, что использование ORM Prisma позволяет масштабировать проект. Сейчас используется SQLite для удобства локального запуска, но переход на PostgreSQL занимает буквально 2 минуты (изменение provider в schema.prisma).
+2. **Архитектура Next.js**: Подчеркните использование Server Actions и Server Components. Это современный подход, который улучшает безопасность (нет прямого доступа к API с клиента) и SEO (SSR).
+3. **Безопасность**: Укажите, что аутентификация реализована без передачи паролей в открытом виде, все токены зашифрованы в HttpOnly cookies, а данные проверяются строгой типизацией Zod как на клиенте, так и на сервере.
+4. **UX/UI**: Расскажите про Accessibility (ARIA атрибуты, доступность с клавиатуры), которые предоставляет Radix UI (основа shadcn).
+
+## Лицензия
+MIT
