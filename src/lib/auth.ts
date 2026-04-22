@@ -45,9 +45,9 @@ export const authOptions: AuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          lastName: user.lastName,
+          lastName: user.lastName || undefined,
           role: user.role,
-        };
+        } as any;
       }
     })
   ],
