@@ -13,9 +13,11 @@ const inter = Inter({ subsets: ["latin", "cyrillic"] });
  * Метаданные приложения (SEO и заголовок вкладки).
  */
 export const metadata: Metadata = {
-  title: "AuroDocs | Система документооборота",
+  title: "autodocs | Система документооборота",
   description: "Автоматизация документооборота для вашего бизнеса",
 };
+
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 /**
  * Корневой компонент разметки (Root Layout).
@@ -27,14 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" className={`${inter.className} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
-        {/* Providers подключает NextAuth сессии и другие контексты */}
-        <Providers>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </Providers>
+    <html lang="ru" className={`${inter.className} h-full antialiased`} suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-300">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {/* Providers подключает NextAuth сессии и другие контексты */}
+          <Providers>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

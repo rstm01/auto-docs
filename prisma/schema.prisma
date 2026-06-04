@@ -3,7 +3,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Конфигурация источника данных (используется PostgreSQL для публичного деплоя)
+// Конфигурация источника данных (PostgreSQL для Vercel)
 datasource db {
   provider = "postgresql"
 }
@@ -30,6 +30,7 @@ model Document {
   status      String   @default("DRAFT")    // Статус: DRAFT (Черновик), PENDING (На проверке), APPROVED (Одобрен), REJECTED (Отклонен)
   authorId    String                        // ID автора (внешний ключ)
   author      User     @relation(fields: [authorId], references: [id]) // Связь с моделью User
+  embedding   String?                       // Семантический вектор (хранится как JSON-строка) для ИИ поиска
   createdAt   DateTime @default(now())      // Дата создания
   updatedAt   DateTime @updatedAt           // Дата последнего изменения
 }

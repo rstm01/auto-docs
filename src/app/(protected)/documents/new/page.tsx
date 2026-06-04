@@ -61,7 +61,7 @@ export default function NewDocumentPage() {
           <CardHeader>
             <CardTitle>Метаданные документа</CardTitle>
             <CardDescription>
-              Заполните основную информацию о документе. После сохранения он получит статус "Черновик".
+              Заполните основную информацию о документе. После сохранения он получит статус &quot;Черновик&quot;.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

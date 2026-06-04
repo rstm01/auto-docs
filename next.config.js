@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Базовая конфигурация для локальной разработки
+  serverExternalPackages: ['@xenova/transformers'],
+  allowedDevOrigins: ['autodocs-app.loca.lt', 'bore.pub']
 };
 
 module.exports = nextConfig;

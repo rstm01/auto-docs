@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type Language = "RU" | "EN";
 
@@ -39,7 +39,7 @@ const translations = {
     features: "Возможности",
     about: "О сервисе",
     heroTitle: "Управляйте документами быстрее и безопаснее",
-    heroDesc: "AuroDocs — это современная система электронного документооборота для малого и среднего бизнеса.",
+    heroDesc: "autodocs — это современная система электронного документооборота для малого и среднего бизнеса.",
     startWork: "Начать работу",
     createAccount: "Создать аккаунт",
     statsTotal: "Всего документов",
@@ -59,6 +59,18 @@ const translations = {
     interfaceSettings: "Базовые параметры интерфейса",
     themeToggle: "Переключение темы",
     langToggle: "Язык интерфейса",
+    searchDocs: "Поиск документов...",
+    edit: "Редактировать",
+    delete: "Удалить",
+    confirmDelete: "Вы уверены, что хотите удалить этот документ?",
+    editDoc: "Редактировать документ",
+    editDocDesc: "Изменение содержания или названия документа",
+    deleting: "Удаление...",
+    adminEditTab: "Управление и изменение",
+    adminPanel: "Панель администратора",
+    adminPanelDesc: "Управление статусами и редактирование любых документов в системе",
+    saveAndApprove: "Утвердить и сохранить",
+    saveAndReject: "Отклонить и сохранить",
   },
   EN: {
     dashboard: "Dashboard",
@@ -88,7 +100,7 @@ const translations = {
     features: "Features",
     about: "About",
     heroTitle: "Manage documents faster and safer",
-    heroDesc: "AuroDocs is a modern document management system for small and medium businesses.",
+    heroDesc: "autodocs is a modern document management system for small and medium businesses.",
     startWork: "Get Started",
     createAccount: "Create Account",
     statsTotal: "Total Documents",
@@ -108,18 +120,29 @@ const translations = {
     interfaceSettings: "Basic interface settings",
     themeToggle: "Theme Switching",
     langToggle: "Interface Language",
+    searchDocs: "Search documents...",
+    edit: "Edit",
+    delete: "Delete",
+    confirmDelete: "Are you sure you want to delete this document?",
+    editDoc: "Edit Document",
+    editDocDesc: "Modify the title or content of the document",
+    deleting: "Deleting...",
+    adminEditTab: "Manage & Modify",
+    adminPanel: "Admin Panel",
+    adminPanelDesc: "Manage statuses and edit any documents in the system",
+    saveAndApprove: "Approve & Save",
+    saveAndReject: "Reject & Save",
   }
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Language>("RU");
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("lang") as Language;
-    if (savedLang) setLangState(savedLang);
-  }, []);
+  const [lang, setLangState] = useState<Language>(() => {
+    if (typeof window === "undefined") return "RU";
+    const savedLang = localStorage.getItem("lang") as Language | null;
+    return savedLang === "RU" || savedLang === "EN" ? savedLang : "RU";
+  });
 
   const setLang = (newLang: Language) => {
     setLangState(newLang);

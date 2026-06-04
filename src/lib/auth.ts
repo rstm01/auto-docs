@@ -1,4 +1,4 @@
-import { AuthOptions } from "next-auth";
+import type { AuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -41,13 +41,15 @@ export const authOptions: AuthOptions = {
         }
 
         // Возврат данных пользователя для сохранения в JWT токене
-        return {
+        const authUser = {
           id: user.id,
           email: user.email,
-          name: user.name,
+          name: user.name ?? undefined,
           lastName: user.lastName || undefined,
           role: user.role,
-        } as any;
+        } satisfies User;
+
+        return authUser;
       }
     })
   ],

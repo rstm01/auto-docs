@@ -1,28 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { updateUserProfile } from "@/server/actions";
-import { useRouter } from "next/navigation";
 
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function AccountPage() {
   const { t } = useLanguage();
-  const { data: session, update } = useSession();
+  const { data: session, status, update } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  
+  if (status === "loading") return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +80,7 @@ export default function AccountPage() {
                 <Input
                   id="lastName"
                   name="lastName"
-                  defaultValue={(session?.user as any)?.lastName || ""}
+                  defaultValue={session?.user?.lastName || ""}
                   placeholder={t("lastNameLabel")}
                 />
               </div>

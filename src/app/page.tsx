@@ -16,7 +16,7 @@ export default function Home() {
             <div className="bg-slate-900 text-white p-1.5 rounded-lg flex items-center justify-center w-8 h-8">
               📄
             </div>
-            <span className="text-xl font-bold tracking-tight">AuroDocs</span>
+            <span className="text-xl font-bold tracking-tight">autodocs</span>
           </div>
           
           <div className="flex items-center gap-6">
@@ -105,7 +105,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2 text-white">
             <span className="text-2xl">📄</span>
-            <span className="text-xl font-bold tracking-tight">AuroDocs</span>
+            <span className="text-xl font-bold tracking-tight">autodocs</span>
           </div>
           <div className="flex gap-8 text-sm">
             <Link href="#" className="hover:text-white transition-colors">Политика конфиденциальности</Link>
@@ -113,7 +113,7 @@ export default function Home() {
             <Link href="#" className="hover:text-white transition-colors">Контакты</Link>
           </div>
           <div className="text-sm">
-            © {new Date().getFullYear()} AuroDocs. Все права защищены.
+            © {new Date().getFullYear()} autodocs. Все права защищены.
           </div>
         </div>
       </footer>

@@ -7,19 +7,27 @@
  */
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { updateDocumentStatus } from "@/server/actions";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { updateDocumentStatus, deleteDocument } from "@/server/actions";
+import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
+import Link from "next/link";
 
 interface StatusActionsProps {
   documentId: string;   // ID документа
   currentStatus: string; // Текущий статус из БД
   isAdmin: boolean;      // Является ли текущий пользователь админом
   isAuthor: boolean;     // Является ли текущий пользователь автором
+  adminPanelMode?: boolean; // Флаг: отрендерен ли компонент в админ-панели
 }
 
-export function StatusActions({ documentId, currentStatus, isAdmin, isAuthor }: StatusActionsProps) {
+export function StatusActions({ documentId, currentStatus, isAdmin, isAuthor, adminPanelMode }: StatusActionsProps) {
+  const router = useRouter();
+  const { t } = useLanguage();
   // Состояние загрузки для индикации процесса выполнения запроса
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  
+  const basePath = adminPanelMode ? "/admin-panel/documents" : "/documents";
 
   /**
    * Вызов серверного действия для обновления статуса.
@@ -30,8 +38,52 @@ export function StatusActions({ documentId, currentStatus, isAdmin, isAuthor }: 
     setIsLoading(null);
   };
 
+  /**
+   * Вызов серверного действия для удаления документа.
+   */
+  const handleDelete = async () => {
+    if (!window.confirm("Правда ли вы хотите удалить этот файл?")) {
+      return;
+    }
+    setIsLoading("delete");
+    const result = await deleteDocument(documentId);
+    if (result && result.error) {
+      alert(result.error);
+      setIsLoading(null);
+    } else {
+      router.push(basePath);
+    }
+  };
+
+  // Права на редактирование и удаление: ADMIN или автор в статусе DRAFT/REJECTED
+  const canEditOrDelete = isAdmin || (isAuthor && (currentStatus === "DRAFT" || currentStatus === "REJECTED"));
+
   return (
     <div className="flex items-center space-x-3">
+      {/* Кнопка Редактировать */}
+      {canEditOrDelete && (
+        <Link 
+          href={`${basePath}/${documentId}/edit`} 
+          className={buttonVariants({ variant: "outline" })}
+        >
+          <span className="mr-2">✏️</span>
+          {t("edit")}
+        </Link>
+      )}
+
+      {/* Кнопка Удалить */}
+      {adminPanelMode && isAdmin && (
+        <Button 
+          variant="outline" 
+          className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+          onClick={handleDelete}
+          disabled={isLoading !== null}
+        >
+          <span className="mr-2">🗑️</span>
+          {isLoading === "delete" ? t("deleting") : t("delete")}
+        </Button>
+      )}
+
       {/* 
           Логика: Если документ в статусе "Черновик" и пользователь — его автор,
           он может отправить его на проверку (статус PENDING).

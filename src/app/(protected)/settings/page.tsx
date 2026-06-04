@@ -1,31 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function SettingsPage() {
   const { lang, setLang, t } = useLanguage();
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    setMounted(true);
-    // Проверяем текущую тему при загрузке
-    if (document.documentElement.classList.contains("dark")) {
-      setTheme("dark");
-    }
-  }, []);
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") return "light";
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  });
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     document.documentElement.classList.toggle("dark");
   };
-
-  if (!mounted) return null;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -105,7 +96,7 @@ export default function SettingsPage() {
             <div>
               <p className="text-sm text-blue-900 font-medium">Бета-тестирование</p>
               <p className="text-xs text-blue-700 mt-1">
-                Дополнительные настройки будут доступны в следующих обновлениях AutoDocs.
+                Дополнительные настройки будут доступны в следующих обновлениях autodocs.
               </p>
             </div>
           </div>
