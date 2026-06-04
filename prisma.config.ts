@@ -10,6 +10,5 @@ export default defineConfig({
   },
   datasource: {
     url: process.env["POSTGRES_PRISMA_URL"] ?? process.env["DATABASE_URL"] ?? "file:./dev.db",
-    directUrl: process.env["POSTGRES_URL_NON_POOLING"],
   },
 });
