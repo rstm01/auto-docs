@@ -3,9 +3,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Конфигурация источника данных (PostgreSQL для Vercel)
+// Конфигурация источника данных
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
 
 // Модель пользователя системы
